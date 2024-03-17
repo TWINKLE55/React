@@ -29,7 +29,7 @@
 }
 .nav-items li:hover{
     color:rgb(157, 62, 184); 
-    
+    cursor: pointer;
     border-bottom:2px solid rgb(157, 62, 184);
 }
 
@@ -70,6 +70,7 @@ img{
     }
     .nav-items li:hover{
         color: rgb(104, 26, 126);
+        cursor: pointer;
         /* box-sizing: content-box; */
         
        
@@ -92,12 +93,21 @@ img{
     margin-left: 10px;
 }
 .res-card{
-    height: 390px;
-    width:250px;
+    height: 400px;
+    width:320px;
     box-shadow: 2px 1px 5px rgba(0,0,0,0.5);
     margin: 10px;
     transition: 0.5s ease-in-out;
     border-radius: 5px;
+}
+.card{
+    height: 400px;
+    width:320px;
+    box-shadow: 2px 1px 5px rgba(0,0,0,0.5);
+    margin: 10px;
+    transition: 0.5s ease-in-out;
+    border-radius: 5px;
+    background-color: #f0f0f0;
 }
 .res-card:hover{
     transform: translateY(20px);
@@ -131,6 +141,15 @@ img{
  
     
 }
+.shimmer-container{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-bottom: 6px;
+ 
+}
 .info{
     /* background-color: blue; */
     padding: 5px;
@@ -145,11 +164,48 @@ img{
     color: antiquewhite;
     font-size: 18px;
     box-shadow: 2px 1px 5px rgba(0,0,0,0.5);
-    
+    cursor: pointer;
 }
-
+.login{
+    padding: 10px;
+    width: 12%;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    background-color: rgb(104, 26, 126);
+    color: antiquewhite;
+    font-size: 18px;
+    box-shadow: 2px 1px 5px rgba(0,0,0,0.5);
+}
 .filter{
     display: flex;
     justify-content: center;
     align-items: center;
+    width:100%;
+}
+.search-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+}
+.search-btn{
+    padding: 15px;
+    margin: 25px;
+    border-radius: 0 5px 5px 0;
+    border: none;
+    background-color: rgb(104, 26, 126);
+    color: antiquewhite;
+    font-size: 18px;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+    margin-left: 0;
+}
+input{
+    width: 90%;
+    font-size: 30px;
+    padding: 7px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.5);
 }
