@@ -1,6 +1,7 @@
-import Shimmer from"./shimmer.js"
+import {Shimmer} from"./shimmer.js"
 import RestaurantCard from "../components/RestauranrCard.js"
 import { useState,useEffect } from "react";
+import { Link } from "react-router-dom";
 const Body = () => {
   let[data,setdata]=useState([]);
   const [searchText,setSearchText]=useState("");
@@ -55,7 +56,10 @@ const Body = () => {
         <div className="res-container">
        {/* not using key (not acceptable)<<<using index<<<<key is prefferable */}
   {/* {console.log(data[0].info.name)} */}
-        {filtered.map((restaurant)=>( <RestaurantCard key={restaurant.info.id} image ={restaurant.info.cloudinaryImageId} cuisines={restaurant.info.cuisines} restname={restaurant?.info?.name} data={restaurant} deliveryTime={restaurant.info.sla.deliveryTime} costForTwo={restaurant.info.costForTwo} avgRating={restaurant.info.avgRating} />) )}
+        {filtered.map((restaurant)=>(
+        <Link  className="a" key={restaurant.info.id} to={`/restaurants/${restaurant.info.id}`}>
+            <RestaurantCard  image ={restaurant.info.cloudinaryImageId} cuisines={restaurant.info.cuisines} restname={restaurant?.info?.name} data={restaurant} deliveryTime={restaurant.info.sla.deliveryTime} costForTwo={restaurant.info.costForTwo} avgRating={restaurant.info.avgRating} />
+        </Link>) )}
       
         </div>
       </div>
