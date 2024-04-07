@@ -1,48 +1,38 @@
-import { useEffect, useState } from "react";
-// import ShimmerMenu from "./shimmer1";
-import { MENU_URL } from "../utils/constants";
-import {Shimmer,ShimmerMenu} from "./shimmer";
-import MenuList from "./MenuList";
+
+import {ShimmerMenu} from "./shimmer";
+import RestaurantCategory from "./RestaurantCategory";
 import { useParams } from "react-router-dom";
+import useRestaurantFetch from "../utils/useRestaurantFetch";
+import { useState } from "react";
+ 
 const Menu = () => {
+const [showIndex,setShowIndex]=useState(0);
+const {id}=useParams();
+const te=useRestaurantFetch(id);
+const dummy="dummy";
 
-  const {id}=useParams();
-  // console.log(id);
-  const [restInfo,setResInfo]=useState([]);
-  const [food,setFood]=useState([]);
+const restInfo=useRestaurantFetch(id);
 
-  const fetchMenu = async () => {
-    const data = await fetch(
-      `https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=28.65420&lng=77.23730&restaurantId=${id}&catalog_qa=undefined&query=Burger&submitAction=ENTER`
-    );
-    const json = await data.json();
-    
-    setResInfo(json.data)
-    setFood(json.data?.cards[2].groupedCard.cardGroupMap.REGULAR.cards[2].card.card.itemCards);
-  };
-
-  
-  useEffect(() => {
-    fetchMenu();
-  }, [id]);
-
-if (restInfo.length===0){
+// console.log(restInfo?.cards[4].groupedCard.cardGroupMap.REGULAR.cards)
+const category=restInfo?.cards[4]?.groupedCard.cardGroupMap.REGULAR.cards.filter((c)=>c.card.card.title)
+// console.log(category)
+if (restInfo===null){
   return <ShimmerMenu/>;
 }
 
- const {name,cuisines,labels,avgRating,sla,costForTwoMessage,aggregatedDiscountInfo}=restInfo?.cards[0].card.card.info;
+ const {name,cuisines,labels,avgRating,sla,costForTwoMessage,aggregatedDiscountInfo}=restInfo.cards[2].card.card.info;
  
   return (
-    <div className="Menu-container">
+    <div className="Menu-container ">
       <div className="info-container">
         <div className="info">
-          <h1>{name}</h1>
-          <p>{cuisines.join("-")}</p>
-          <p>{labels[1].message}</p>
+          <h1 className="text-2xl font-900 font-bold">{name}</h1>
+          <p className="text-lg font-700 font-medium">{cuisines.join("-")}</p>
+          <p className="text-lg font-700 font-medium ">{labels[1].message}</p>
     
         </div>
         <div className="rating">
-          <h1>⭐{avgRating}</h1>
+          <h1 className="text-xl font-700 font-bold ">⭐{avgRating}</h1>
         </div>
       </div>
 
@@ -52,10 +42,10 @@ if (restInfo.length===0){
           <span>{costForTwoMessage}</span>
         </div>
         <div className="discount-container">
-          <div className="discount-box">{aggregatedDiscountInfo.descriptionList[0].meta}</div>
-          <div className="discount-box">{aggregatedDiscountInfo.descriptionList[1].meta}</div>
-          <div className="discount-box">{aggregatedDiscountInfo.shortDescriptionList[0].meta}</div>
-          <div className="discount-box">{aggregatedDiscountInfo.shortDescriptionList[1].meta}</div>
+          <div className="discount-box font-medium text-lg">{aggregatedDiscountInfo.descriptionList[0]?.meta}</div>
+          <div className="discount-box font-medium text-lg">{aggregatedDiscountInfo.descriptionList[1]?.meta}</div>
+          <div className="discount-box font-medium text-lg">{aggregatedDiscountInfo.shortDescriptionList[0]?.meta}</div>
+          
         </div>
         <div className="veg-menu">
           <span>Veg Only</span>
@@ -63,10 +53,14 @@ if (restInfo.length===0){
         </div>
       </div>
       
-      <div className="menu-items">
-        {/* {console.log(food)} */}
-        {food.map((menu,i)=>{return <MenuList key={i} info={menu.card.info}/>})}
-      </div>
+       <div className="menu-items pt-5">
+        { category.map((category ,index)=>{return  <RestaurantCategory index={index}  setShowIndex={(i)=>{
+          // console.log(i);
+          setShowIndex(i)
+        }
+          
+          } showItem={index===showIndex?true:false}  key={category?.card?.card?.title} data={category?.card?.card}/>})}
+       </div>
     </div>
   );
 };

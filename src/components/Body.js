@@ -1,47 +1,54 @@
 import {Shimmer} from"./shimmer.js"
 import RestaurantCard from "../components/RestauranrCard.js"
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus.js";
+import { useEffect,useState } from "react"
+import { Main_URL } from "../utils/constants.js";
+import { withLabel } from "../components/RestauranrCard.js";
+// import UserContext from "../utils/UserContext.js";
+// import { useContext } from "react";
+const LabelCard=withLabel(RestaurantCard);
 const Body = () => {
-  let[data,setdata]=useState([]);
   const [searchText,setSearchText]=useState("");
-  const [filtered,setFiltered]=useState([]);
-  // let filterList=()=>{
-  //    setdataobject(dataobject.filter(
-  //     (x)=>{ if(x.info.avgRating>4.3)return x}
-  //   ))
-  //   // console.log(data)
-  // }
- 
+  const onlinestatus=useOnlineStatus();
+  // const {loggedin,setUserName}=useContext(UserContext)
+
+  if(onlinestatus===false) return (<h1>OMFOOO.....Mtlb Katt gya.</h1>)
+  const [filtered,setFiltered]=useState(null);
+  
+  const[data,setdata]=useState(null);
     useEffect(()=>{
-      fetchdata();
-    },[]
-    );
-   const fetchdata=async()=>{
-    const data= await fetch(
-     "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.65420&lng=77.23730&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING" 
-    );
+    fetchdata();
+    },[]);
+
+    const fetchdata=async ()=>{
+    const data= await fetch(Main_URL);
     const json=await data.json();
-    // console.log(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setdata(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-    setFiltered(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-   }
-  // console.log("render");
-    return (data.length===0)? <Shimmer/>:(
-      <div className="body">
+    
+    setdata(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    // console.log(json.data)
+    setFiltered(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);}
+
+    return (data===null)? <Shimmer/>:(
+      <div className="body ">
         
-        <div className="filter">
+        <div className="filter ">
             <div className="search-container">
-              <input type="text"   value={searchText} onChange={(e)=>{
+              <input type="text"  className="input-body" value={searchText} onChange={(e)=>{
               setSearchText(e.target.value);
               }}/>
               <button className="search-btn" onClick={()=>{
                  const filterRestaurant=data.filter((res)=>
                   res.info.name.toLowerCase().includes(searchText.toLowerCase()));
                 
-                  setFiltered(filterRestaurant);
+                setFiltered(filterRestaurant);
+          
                   
               }}>Search</button>
+                      {/* <input type="text" className="input-body"  value={loggedin} onChange={(e)=>{
+              setUserName(e.target.value);
+              }}/> */}
             </div>
 
 
@@ -53,12 +60,19 @@ const Body = () => {
            >
             Search For Best Restaurant</button>
         </div>
-        <div className="res-container">
+
+        <div className="res-container ">
        {/* not using key (not acceptable)<<<using index<<<<key is prefferable */}
   {/* {console.log(data[0].info.name)} */}
-        {filtered.map((restaurant)=>(
+        {filtered?.map((restaurant)=>(
         <Link  className="a" key={restaurant.info.id} to={`/restaurants/${restaurant.info.id}`}>
-            <RestaurantCard  image ={restaurant.info.cloudinaryImageId} cuisines={restaurant.info.cuisines} restname={restaurant?.info?.name} data={restaurant} deliveryTime={restaurant.info.sla.deliveryTime} costForTwo={restaurant.info.costForTwo} avgRating={restaurant.info.avgRating} />
+        
+          
+         { restaurant.info.aggregatedDiscountInfoV3?.header? (<LabelCard  info={restaurant.info}/>): (<RestaurantCard info={restaurant.info}/>)
+        }
+            
+            
+          
         </Link>) )}
       
         </div>

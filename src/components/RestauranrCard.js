@@ -1,22 +1,35 @@
 import { IMG_URL } from "../utils/constants";
 
-const RestaurantCard = ({restname,data,image,cuisines,costForTwo,deliveryTime,avgRating}) => {
-    // console.log(restname,image,data,cuisines,costForTwo,deliveryTime,avgRating);
-  
+const RestaurantCard = ({info}) => {
+  // console.log(info)
+  const{name,cuisines,avgRating,costForTwo,sla,cloudinaryImageId}=info;
     return (
       <div className="res-card">
-        <img src={IMG_URL+image}/>
+        <img src={IMG_URL+cloudinaryImageId}/>
         <div className="info">
           
-         { <h2>{restname}</h2> }
-          <h4>{cuisines.join(",")}</h4> 
+         { <h2 className="font-medium">{name}</h2> }
+          <h4>{cuisines}</h4> 
            <h4>☆{avgRating}</h4>
           <h4>{costForTwo} </h4>
-          <h4>⏱{deliveryTime} minutes</h4> 
+          {/* <h4>⏱{sla.deliveryTime} minutes</h4>  */}
           
         </div>
       </div>
-    );
-  };
+    );  };
+
+     export const withLabel=(RestaurantCard)=>{
+     return (info)=>{
+      // console.log(info)
+          return(
+            <div>
+              <label className="bg-black absolute text-white p-2 rounded-lg z-10 ">{info.info.aggregatedDiscountInfoV3?.subHeader}</label>
+              <RestaurantCard info={info.info}/>
+            </div>
+          )
+
+     }
+    }
+
 
   export default RestaurantCard;

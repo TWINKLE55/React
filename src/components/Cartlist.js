@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
 import { MENU_URL } from "../utils/constants";
-import { addItem } from "../utils/CartSlice";
-const MenuList=({info})=>{
+import { removeItem } from "../utils/CartSlice";
+const CartList=({info})=>{
 // console.log(info)
 const dispatch=useDispatch()
 const handleClick=(info)=>{
- dispatch(addItem(info))
+ dispatch(removeItem(info))
 }
     return(
       <div>
@@ -23,7 +23,7 @@ const handleClick=(info)=>{
               className="menu-img"
               src={MENU_URL+info.imageId}
             />
-            <button className="relative bg-black rounded-lg text-white p-2 w-[80px] text-center ml-8 bottom-7 " onClick={()=>handleClick(info)}>ADD +</button>
+            <button className="relative bg-black rounded-lg text-white p-2 w-[85px] text-center ml-8 bottom-7 " onClick={()=>handleClick(info)}>Remove -</button>
           </div>
           </div>
        
@@ -32,4 +32,4 @@ const handleClick=(info)=>{
     );
 };
 
-export default MenuList;
+export default CartList;
